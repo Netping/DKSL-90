@@ -29,17 +29,28 @@ rsync -av --progress /mnt/ ./iso/
 git clone git@github.com:Netping/DKSF_90.git ./isogit
 
 rsync -vr ./isogit/iso/ ./iso/
-rm -rf ./isogit 
+#rm -rf ./isogit 
 
 #download borg_backup
-wget $BORG_VERSION ./iso/netping/borg
+if [ -f $(basename -- $BORG_VERSION) ]
+then
+  cp ./$(basename -- $BORG_VERSION) ./iso/netping/borg
+else
+  wget $BORG_VERSION
+  cp ./$(basename -- $BORG_VERSION) ./iso/netping/borg
+fi
 
 #clone repo with NpServerSettings
 git clone git@github.com:Netping/DKST90_NpServerSettings.git ./iso/netping/zabbix/NpServerSettings
 
 #download and install zabbix repo 
-wget https://repo.zabbix.com/zabbix/5.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.0-1+focal_all.deb
-apt install ./zabbix-release_5.0-1+focal_all.deb
+if [ -f $(basename -- $ZABBIX_VERSION) ]
+then
+  apt install ./$(basename -- $ZABBIX_VERSION)
+else
+  wget $ZABBIX_VERSION
+  apt install ./$(basename -- $ZABBIX_VERSION)
+fi
 
 #zabbix
 apt clean
@@ -55,7 +66,8 @@ cp /var/cache/apt/archives/*.deb ./iso/netping/deb/pgsql
 VERSION=$MAJOR_VERSION.$MINOR_VERSION.$PATH_VERSION.$BUILD_VERSION$(date '+%Y-%m-%dT%H:%M:%S')
 echo $VERSION > ./iso/netping/np_version
 
-cp -r ./sql ./iso/netping/sql
+#sql pgdb files 
+cp -r ./sql ./iso/netping/
 
 
 mv ./iso/ubuntu ./
