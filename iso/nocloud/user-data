@@ -75,6 +75,8 @@ autoinstall:
     - chmod -R u+rw /target/var/lib/postgresql/12/main/
     - sed -i 's/NamePolicy=mac/Name=toDKST/g' /target/lib/systemd/network/73-usb-net-by-mac.link
     - cp /cdrom/netping/netplan.yaml /target/etc/netplan/
+    - printf 'INSTALLATION COMPLETED. Please remove installation media and press Ctrl+Alt+Del' 
+    - sleep 3600
 #    - cp /cdrom/netping/10-network-manager.pkla /target/var/lib/polkit-1/localauthority/50-local.d/10-network-manager.pkla
 #  error-commands:
 #    - printf 'ERROR'
