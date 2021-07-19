@@ -1,0 +1,1 @@
+if sfdisk -d /dev/sda | grep "/dev/sda4"; then echo "Partition /dev/sda4 exist"; else sgdisk -n 4:55576576:$ENDSECTOR -c 4:"backup" -t 4:8300 /dev/sda && sleep 10 && partprobe /dev/sda && mkfs -t ext4 /dev/sda4 && mkdir /backup; fi
