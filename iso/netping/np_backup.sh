@@ -139,7 +139,7 @@ case "$1" in
 esac
 }
 
-
+export BORG_UNKNOWN_UNENCRYPTED_REPO_ACCESS_IS_OK=yes
 function restore() {
 case "$1" in
   "system")

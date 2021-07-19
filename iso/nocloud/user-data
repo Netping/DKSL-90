@@ -10,7 +10,7 @@ autoinstall:
 #    - cat /cdrom/netping/part_table
     - parted -l /dev/sda
 #    - if sfdisk -d /dev/sda | grep "/dev/sda3"; then echo "Partition /dev/sda3 exist"; else sgdisk --load-backup=/cdrom/netping/sgdisk-table -Gg /dev/sda && mkfs -t ext4 /dev/sda3; fi
-    - if sfdisk -d /dev/sda | grep "/dev/sda4"; then echo "Partition /dev/sda4 exist"; else sgdisk -n 4:55576576:$ENDSECTOR -t 4:8300 /dev/sda && partprobe /dev/sda && mkfs.ext4 /dev/sda4; fi
+#    - if sfdisk -d /dev/sda | grep "/dev/sda4"; then echo "Partition /dev/sda4 exist"; else sgdisk -n 4:55576576:$ENDSECTOR -t 4:8300 /dev/sda && partprobe /dev/sda && mkfs.ext4 /dev/sda4; fi
     - sleep 10
   keyboard:
     layout: us
@@ -24,20 +24,38 @@ autoinstall:
           dhcp-identifier: mac  
   storage:
     config:
-    - {ptable: gpt, path: /dev/sda, wipe: superblock, preserve: false, name: '', grub_device: false,
+#    - {ptable: gpt, path: /dev/sda, wipe: superblock, preserve: false, name: '', grub_device: false,
+#      type: disk, id: disk-sda}
+##    - {ptable: gpt, path: /dev/sda, preserve: false, name: '', grub_device: false,
+##      type: disk, id: disk-sda}
+##    - {device: disk-sda, size: 536870912, wipe: superblock, flag: boot, number: 1,
+##      preserve: false, grub_device: true, type: partition, id: partition-3}
+##    - {fstype: fat32, volume: partition-3, preserve: false, type: format, id: format-3}
+##    - {device: disk-sda, size: 1073741824, wipe: superblock, flag: '', number: 2,
+##      preserve: false, grub_device: false, type: partition, id: partition-4}
+##    - {fstype: ext4, volume: partition-4, preserve: false, type: format, id: format-4}
+##    - {device: disk-sda, size: 26843545600, wipe: superblock, flag: '', number: 3,
+##      preserve: false, grub_device: false, type: partition, id: partition-5}
+##    - {fstype: ext4, volume: partition-5, preserve: false, type: format, id: format-5}
+##   - {device: format-5, path: /, type: mount, id: mount-5}
+##    - {device: format-4, path: /boot, type: mount, id: mount-4}
+##    - {device: format-3, path: /boot/efi, type: mount, id: mount-3}
+    - {ptable: gpt, path: /dev/sda, preserve: false, name: '', grub_device: false,
       type: disk, id: disk-sda}
     - {device: disk-sda, size: 536870912, wipe: superblock, flag: boot, number: 1,
-      preserve: false, grub_device: true, type: partition, id: partition-3}
-    - {fstype: fat32, volume: partition-3, preserve: false, type: format, id: format-3}
+      preserve: false, grub_device: true, type: partition, id: partition-0}
+    - {fstype: fat32, volume: partition-0, preserve: false, type: format, id: format-0}
     - {device: disk-sda, size: 1073741824, wipe: superblock, flag: '', number: 2,
-      preserve: false, grub_device: false, type: partition, id: partition-4}
-    - {fstype: ext4, volume: partition-4, preserve: false, type: format, id: format-4}
-    - {device: disk-sda, size: 26843545600, wipe: superblock, flag: '', number: 3,
-      preserve: false, grub_device: false, type: partition, id: partition-5}
-    - {fstype: ext4, volume: partition-5, preserve: false, type: format, id: format-5}
-    - {device: format-5, path: /, type: mount, id: mount-5}
-    - {device: format-4, path: /boot, type: mount, id: mount-4}
-    - {device: format-3, path: /boot/efi, type: mount, id: mount-3}
+      preserve: false, grub_device: false, type: partition, id: partition-1}
+    - {fstype: ext4, volume: partition-1, preserve: false, type: format, id: format-1}
+    - {device: disk-sda, size: 32212254720, wipe: superblock, flag: '', number: 3,
+      preserve: false, grub_device: false, type: partition, id: partition-2}
+    - {fstype: ext4, volume: partition-2, preserve: false, type: format, id: format-2}
+    - {device: format-2, path: /, type: mount, id: mount-2}
+    - {device: disk-sda, size: 30599544832, flag: '', number: 4, preserve: false,
+      grub_device: false, type: partition, id: partition-3}
+    - {device: format-1, path: /boot, type: mount, id: mount-1}
+    - {device: format-0, path: /boot/efi, type: mount, id: mount-0}
   ssh:
     allow-pw: true
     install-server: true
@@ -49,32 +67,42 @@ autoinstall:
     - echo 'visor ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/visor
     - printf 'LATE COMMANDS'
     - sleep 10
-#    - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/pgsql/*.deb
-#    - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/zabbix/*.deb
-#    - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/*.deb
+    - cp /cdrom/netping/disk.sh /target/etc/disk.sh
+    - curtin in-target --target=/target -- bash /etc/disk.sh
+    - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/pgsql/*.deb
+    - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/zabbix/*.deb
+##    - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/*.deb
 #    - sed -i 's/# DBPassword=/DBPassword=netping/g' /target/etc/zabbix/zabbix_server.conf
 #    - sed -i 's/; php_value date.timezone Europe\/Riga/php_value date.timezone Europe\/Moscow/g' /target/etc/zabbix/php-fpm.conf
-#    - cp /cdrom/netping/zabbix/zabbix.conf.php /target/etc/zabbix/web/zabbix.conf.php
-#    - cp /cdrom/netping/zabbix/nginx.conf /target/etc/zabbix/nginx.conf
-#    - rm -f /target/etc/nginx/sites-enabled/default
-#    - cp /cdrom/netping/np_version /target/etc/np_version
+    - cp /cdrom/netping/zabbix_server.conf /target/etc/zabbix/
+    - cp /cdrom/netping/php-fpm.conf /target/etc/zabbix/
+    - cp /cdrom/netping/zabbix/zabbix.conf.php /target/etc/zabbix/web/zabbix.conf.php
+    - cp /cdrom/netping/zabbix/nginx.conf /target/etc/zabbix/nginx.conf
+    - rm -f /target/etc/nginx/sites-enabled/default
+    - cp /cdrom/netping/np_version /target/etc/np_version
+#    - rm /target/usr/share/zabbix/modules/NpServerSettings
 #    - cp -r /cdrom/netping/zabbix/NpServerSettings /target/usr/share/zabbix/modules/
 #    - awk -F":" '{if ($1=="www-data") system("chown -R " $3":"$4 " /target/usr/share/zabbix/modules/NpServerSettings") }' /target/etc/passwd
-#    - cp /cdrom/netping/zabbix-server.service /target/lib/systemd/system/zabbix-server.service
-#    - cp /cdrom/netping/zabbix-agent.service /target/lib/systemd/system/zabbix-agent.service
-#    - ln -s /target/lib/systemd/system/zabbix-server.service /target/etc/systemd/system/multi-user.target.wants/zabbix-server.service
-#    - cp /cdrom/netping/borg /target/usr/local/bin/
-#    - chmod +x /target/usr/local/bin/borg
-#    - if [ ! -d /target/backup/tmp ]; then mkdir /target/backup/tmp; fi 
-#    - cp /cdrom/netping/np_backup.sh /target/backup/
-#    - chmod +x /target/backup/np_backup.sh
-#    - cp -r /cdrom/netping/sql/* /target/var/lib/postgresql/12/main/
-#    - awk -F":" '{if ($1=="postgres") system("chown -R " $3":"$4 " /target/var/lib/postgresql/12/main/") }' /target/etc/passwd
-#    - chmod -R u+rw /target/var/lib/postgresql/12/main/
+    - rm /target/lib/systemd/system/zabbix-server.service
+    - cp /cdrom/netping/zabbix-server.service /target/lib/systemd/system/zabbix-server.service
+    - rm /target/lib/systemd/system/zabbix-agent.service
+    - cp /cdrom/netping/zabbix-agent.service /target/lib/systemd/system/zabbix-agent.service
+    - ln -s /target/lib/systemd/system/zabbix-server.service /target/etc/systemd/system/multi-user.target.wants/zabbix-server.service
+    - cp /cdrom/netping/borg /target/usr/local/bin/
+    - chmod +x /target/usr/local/bin/borg
+    - if [ ! -d /target/backup/tmp ]; then mkdir /target/backup/tmp; fi 
+    - cp /cdrom/netping/np_backup.sh /target/backup/
+    - chmod +x /target/backup/np_backup.sh
+    - cp -r /cdrom/netping/sql/* /target/var/lib/postgresql/12/main/
+    - awk -F":" '{if ($1=="postgres") system("chown -R " $3":"$4 " /target/var/lib/postgresql/12/main/") }' /target/etc/passwd
+    - chmod -R u+rw /target/var/lib/postgresql/12/main/
 #    - sed -i 's/NamePolicy=mac/Name=toDKST/g' /target/lib/systemd/network/73-usb-net-by-mac.link
-#    - cp /cdrom/netping/disk.sh /target/etc/
-#    - curtin in-target --target=/target -- bash /etc/disk.sh
-    - echo '/dev/sda4 /backup ext4 defaults 0 0' > /target/etc/fstab
+    - cp /cdrom/netping/73-usb-net-by-mac.link /target/lib/systemd/network/
+    - cp /cdrom/netping/restore.sh /target/backup/restore.sh
+#    - curtin in-target --target=/target -- bash /backup/restore.sh
+    - cp /cdrom/netping/rest.sh /target/backup/
+    - cp /cdrom/netping/root /target/backup/
+    - curtin in-target --target=/target -- bash /backup/restore.sh
     - cp /cdrom/netping/netplan.yaml /target/etc/netplan/
     - cp /cdrom/netping/grub /target/etc/default/
     - curtin in-target --target=/target -- update-grub
