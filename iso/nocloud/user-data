@@ -81,7 +81,7 @@ autoinstall:
     - rm -f /target/etc/nginx/sites-enabled/default
     - cp /cdrom/netping/np_version /target/etc/np_version
 #    - rm /target/usr/share/zabbix/modules/NpServerSettings
-#    - cp -r /cdrom/netping/zabbix/NpServerSettings /target/usr/share/zabbix/modules/
+    - cp -r /cdrom/netping/zabbix/NpServerSettings /target/usr/share/zabbix/modules/
 #    - awk -F":" '{if ($1=="www-data") system("chown -R " $3":"$4 " /target/usr/share/zabbix/modules/NpServerSettings") }' /target/etc/passwd
     - rm /target/lib/systemd/system/zabbix-server.service
     - cp /cdrom/netping/zabbix-server.service /target/lib/systemd/system/zabbix-server.service
