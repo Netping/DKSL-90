@@ -1,4 +1,4 @@
 15 23 * * * bash /backup/np_backup.sh create users  
 30 23 * * * bash /backup/np_backup.sh create network
 45 23 * * * bash /backup/np_backup.sh create zabbix
-
+@reboot bash /etc/np_scripts/com_hb.sh
