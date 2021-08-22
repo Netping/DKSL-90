@@ -1,0 +1,6 @@
+[Allow www-data modify network settings]
+Identity=unix-user:www-data
+Action=org.freedesktop.NetworkManager.*
+ResultAny=yes
+ResultInactive=yes
+ResultActive=yes
