@@ -1,0 +1,2 @@
+#sgdisk -n 4:55576576:$ENDSECTOR -c 4:"backup" -t 4:8300 /dev/sda && partprobe /dev/sda && mkfs.ext4 /dev/sda4
+if file -sL /dev/sda4 | grep "ext4"; then mkdir /backup && mount /dev/sda4 /backup && chmod 777 -R /backup && echo "/dev/sda4 /backup ext4 defaults 0 0" >> /etc/fstab; else mkfs.ext4 /dev/sda4 && mkdir /backup && mount /dev/sda4 /backup && chmod 777 -R /backup && echo "/dev/sda4 /backup ext4 defaults 0 0" >> /etc/fstab; fi

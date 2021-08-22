@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #vv.lisyak@gmail.com
 
-if [ -f ver ]
+if [ -f app ]
 then
-  export $(cat ver | sed 's/#.*//g' | xargs)
+  export $(cat app | sed 's/#.*//g' | xargs)
 else 
   echo "ver Environment fine not exist"
   exit 0
@@ -25,18 +25,29 @@ fi
 
 rsync -av --progress /mnt/ ./iso/
 
-#clone repo with configs and sync with iso
-git clone -b '$MAJOR_VERSION.$MINOR_VERSION.$PATH_VERSION' git@github.com:Netping/DKSF_90.git ./isogit
+CONFIG=bash /tmp/isogit/config.sh
+GIT=git clone --depth 1 --branch
+#CAT=cat .app | grep -vE "(^#|^$)" | grep
 
-rsync -vr ./isogit/iso/ ./iso/
-rm -rf ./isogit 
+#clone repo with configs and sync with iso
+git clone $ZABBIX_REPO ./isogit
+$CONFIG
 
 #Borg
-bash /tmp/iso/netping/backup/borg.sh
+git clone $BORG_REPO ./isogit
+$CONFIG
 
 #clone repo with NpServerSettings
-git clone -b '$MAJOR_VERSION.$MINOR_VERSION.$PATH_VERSION' git@github.com:Netping/DKST90_NpServerSettings.git /tmp/
-bash /tmp/DKST90_NpServerSettings/config.sh
+git clone $NPSETTINGS ./isogit
+$CONFIG
+
+if [ -f ver ]
+then
+  export $(cat ver | sed 's/#.*//g' | xargs)
+else
+  echo "ver Environment fine not exist"
+  exit 0
+fi
 
 VERSION=$MAJOR_VERSION.$MINOR_VERSION.$PATH_VERSION.$BUILD_VERSION$(date '+%Y-%m-%dT%H:%M:%S')
 echo $VERSION > ./iso/netping/np_version
