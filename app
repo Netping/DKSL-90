@@ -1,5 +1,8 @@
 ##UBUNTU##
 UBUNTU_ISO="https://releases.ubuntu.com/20.04/ubuntu-20.04.2-live-server-amd64.iso"
+##BASE-MOD##
+BASE_TAG="0.3.1"
+BASE_REPO="git@github.com:Netping/DKSF_90.git"
 ##ZABBIX##
 ZABBIX_TAG="0.3.1"
 ZABBIX_REPO="git@github.com:0zZz1k/DKSL_APP_ZABBIX.git"
