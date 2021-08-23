@@ -4,28 +4,19 @@
 if [ -f app ]
 then
   export $(cat app | sed 's/#.*//g' | xargs)
-else 
-  echo "app Environment fine not exist"
-  exit 0
-fi
-
-if [ -f ver ]
-then
   export $(cat ver | sed 's/#.*//g' | xargs)
 else 
-  echo "ver Environment fine not exist"
+  echo "Environment fine not exist"
   exit 0
 fi
 
 apt update
 apt install -y rsync cloud-image-utils isolinux xorriso mc netcat git
 
-rm /tmp/app
-cp ./app /tmp/
 cd /tmp && rm -rf ./iso*
 mkdir ./iso && chmod 777 ./iso
 
-#mount if iso exist and download & mount iso if not exist   
+#mount if iso exist and download & mount iso if not exist
 if [ -f $(basename -- $UBUNTU_ISO) ]
 then
   mount ./$(basename -- $UBUNTU_ISO) /mnt
@@ -36,41 +27,25 @@ fi
 
 rsync -av --progress /mnt/ ./iso/
 
-#CONFIG=bash /tmp/isogit/config.sh
-#GIT=git clone --depth 1 --branch
-#CAT=cat .app | grep -vE "(^#|^$)" | grep
-
 #clone repo with configs and sync with iso
-git clone $BASE_REPO ./isogit
+git clone --depth 1 --branch $MAJOR_VERSION.$MINOR_VERSION.$PATH_VERSION $BASE_REPO ./isogit
 rsync -vr ./isogit/iso/ ./iso/
 rm -rf ./isogit
 
 #clone repo with Zabbix
-if cat /tmp/app | grep -vE "(^#|^$)" | grep ZABBIX_TAG
-then
-git clone --depth 1 --branch $ZABBIX_TAG $ZABBIX_REPO ./isogit
+git clone --depth 1 --branch $MAJOR_VERSION.$MINOR_VERSION.$PATH_VERSION $ZABBIX_REPO ./isogit
 bash /tmp/isogit/config.sh
 rm -rf ./isogit
-else echo "no zabbix"
-fi
 
-#Borg
-if cat /tmp/app | grep -vE "(^#|^$)" | grep BORG_TAG
-then
-git clone --depth 1 --branch $BORG_TAG $BORG_REPO ./isogit
+#clone repo with Borg
+git clone --depth 1 --branch $MAJOR_VERSION.$MINOR_VERSION.$PATH_VERSION $BORG_REPO ./isogit
 bash /tmp/isogit/config.sh
 rm -rf ./isogit
-else echo "no borg"
-fi
 
 #clone repo with NpServerSettings
-if cat /tmp/app | grep -vE "(^#|^$)" | grep NPSETTINGS_TAG
-then
-git clone --depth 1 --branch $NPSETTINGS_TAG $NPSETTINGS_REPO ./isogit
+git clone --depth 1 --branch $MAJOR_VERSION.$MINOR_VERSION.$PATH_VERSION $NPSETTINGS_REPO ./isogit
 bash /tmp/isogit/config.sh
 rm -rf ./isogit
-else echo "no npsettings"
-fi
 
 VERSION=$MAJOR_VERSION.$MINOR_VERSION.$PATH_VERSION.$BUILD_VERSION$(date '+%Y-%m-%dT%H:%M:%S')
 echo $VERSION > ./iso/netping/np_version
