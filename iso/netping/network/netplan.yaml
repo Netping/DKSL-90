@@ -1,8 +1,5 @@
 network:
   ethernets:
-    eth0:
-      dhcp-identifier: mac
-      dhcp4: true
     eth1:
       dhcp-identifier: mac      
       dhcp4: true

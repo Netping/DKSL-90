@@ -1,0 +1,20 @@
+#!/bin/bash
+
+PS3='Please enter your choice: '
+options=("Restore settings" "Reboot" "Shutdown")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Restore settings")
+            sudo bash /etc/np_scripts/rest_com.sh && sudo netplan apply
+            ;;
+        "Reboot")
+            sudo shutdown -r now
+            ;;
+        "Shutdown")
+            sudo shutdown -h now
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+
