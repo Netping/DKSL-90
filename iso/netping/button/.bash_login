@@ -1,3 +1,0 @@
-if test $(tty) = "/dev/tty2"; then
-  exec /bin/bash /etc/np_scripts/dialog
-fi

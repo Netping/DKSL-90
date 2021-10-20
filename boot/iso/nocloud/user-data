@@ -50,15 +50,18 @@ autoinstall:
     - cp /cdrom/netping/disk/disk.sh /target/etc/disk.sh
     - curtin in-target --target=/target -- bash /etc/disk.sh
     - cp /cdrom/netping/np_version /target/etc/np_version
-    - bash /cdrom/netping/apps.sh
-    - cp /cdrom/netping/network/73-usb-net-by-mac.link /target/lib/systemd/network/
-    - mkdir /target/etc/np_scripts
-    - cp /cdrom/netping/button/* /target/etc/np_scripts/
-    - mkdir /target/etc/systemd/system/getty@tty2.service.d
-    - cp /cdrom/netping/button/override.conf /target/etc/systemd/system/getty@tty2.service.d/
-    - cp /cdrom/netping/button/.bash_login /target/etc/skel/
-    - cp /cdrom/netping/network/netplan.yaml /target/etc/netplan/
-    - cp /cdrom/netping/network/grub /target/etc/default/
-    - curtin in-target --target=/target -- update-grub
+    - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/pgsql/*.deb
+    - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/zabbix/*.deb
+    - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/updates/*.deb
+#    - bash /cdrom/netping/apps.sh
+#    - cp /cdrom/netping/network/73-usb-net-by-mac.link /target/lib/systemd/network/
+#    - mkdir /target/etc/np_scripts
+#    - cp /cdrom/netping/button/* /target/etc/np_scripts/
+#    - mkdir /target/etc/systemd/system/getty@tty2.service.d
+#    - cp /cdrom/netping/button/override.conf /target/etc/systemd/system/getty@tty2.service.d/
+#    - cp /cdrom/netping/button/.bash_login /target/etc/skel/
+#    - cp /cdrom/netping/network/netplan.yaml /target/etc/netplan/
+#    - cp /cdrom/netping/network/grub /target/etc/default/
+#    - curtin in-target --target=/target -- update-grub
     - printf 'INSTALLATION COMPLETED. Please remove installation media and press Ctrl+Alt+Del' 
     - sleep 3600

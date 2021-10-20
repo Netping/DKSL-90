@@ -1,0 +1,9 @@
+Package: dksl-90
+Version: 0.1
+Maintainer: vv.lisyak@gmail.com
+Architecture: all
+Section: misc
+Depends: dpkg, ubnt-app-borg (= 0.1), ubnt-zabbix-npser-set (= 0.1), ubnt-zabbix-template (= 0.1), zabbix-release (= 1:5.2-1+ubuntu20.04)
+Description: NetPing
+ First deb build.
+ Try nomber one.
