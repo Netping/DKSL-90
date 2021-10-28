@@ -33,7 +33,7 @@ rm -rf ./isogit
 
 #dksl-90
 apt clean
-apt install --download-only -y DKSL_90.1.1
+apt install --download-only -y dksl-90
 cp /var/cache/apt/archives/*.deb ./iso/netping/deb/updates/
 
 #zabbix
