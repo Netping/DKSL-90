@@ -48,7 +48,7 @@ apt install --download-only -y postgresql
 cp /var/cache/apt/archives/*.deb ./iso/netping/deb/pgsql
 
 
-VERSION=$MAJOR_VERSION.$MINOR_VERSION.$PATH_VERSION.$BUILD_VERSION$(date '+%Y-%m-%dT%H:%M:%S')
+VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATH_VERSION-$BUILD_VERSION$(date '+%Y-%m-%dT%H:%M:%S')
 echo $VERSION > ./iso/netping/np_version
 
 mv ./iso/ubuntu ./
