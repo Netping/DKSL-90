@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #v0.2 4d4441@gmail.com
 
-if [ -f .iso ]
+if [ -f ver ]
 then
-  export $(cat .iso | sed 's/#.*//g' | xargs)
+  export $(cat ./ver | sed 's/#.*//g' | xargs)
 else 
-  echo ".iso Environment fine not exist"
+  echo "ver Environment fine not exist"
   exit 0
 fi
 apt update
