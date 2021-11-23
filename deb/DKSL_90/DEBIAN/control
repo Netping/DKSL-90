@@ -1,9 +1,0 @@
-Package: dksl-90
-Version: 0.1
-Maintainer: vv.lisyak@gmail.com
-Architecture: amd64
-Section: misc
-Depends: dpkg, ubnt-app-borg (= 0.0-1), ubnt-zabbix-npser-set (= 0.0-1), ubnt-zabbix-template (= 0.0-1)
-Description: NetPing
- First deb build.
- Try nomber one.
