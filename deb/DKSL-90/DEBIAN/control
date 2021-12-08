@@ -1,5 +1,6 @@
 Package: dksl-90
 Version: 0.0-1
+Depends: ubnt-app-borg, ubnt-zabbix-template, ubnt-zabbix-npser-set
 Maintainer: vv.lisyak@gmail.com
 Architecture: all
 Section: misc
