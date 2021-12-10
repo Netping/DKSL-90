@@ -1,9 +1,1 @@
-Package: DKSL-90
-Version: 0.0-1
-Maintainer: vv.lisyak@gmail.com
-Architecture: all
 Depends: UBNT-zabbix-template, UBNT-app-borg, UBNT-zabbix-npserver-settings
-Section: misc
-Description: NetPing
- NetPing.
- DKSL-90.
