@@ -1,5 +1,0 @@
-#!/bin/bash
-
-echo "deb [arch=amd64 trusted=yes] http://repo.ubnt.netping.ru ./" > /etc/apt/sources.list.d/netping.list
-
-exit 0

@@ -33,7 +33,7 @@ rm -rf ./isogit
 
 #dksl-90
 apt clean
-apt install --download-only -y dksl-90 ubnt-app-borg ubnt-zabbix-npser-set ubnt-zabbix-template
+apt install --download-only -y DKSL-90
 cp /var/cache/apt/archives/*.deb ./iso/netping/deb/updates/
 
 #zabbix
