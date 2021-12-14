@@ -1,1 +1,1 @@
-Depends: UBNT-zabbix-template, UBNT-app-borg, UBNT-zabbix-npserver-settings
+Depends: ubnt-zabbix-template, ubnt-app-borg, ubnt-zabbix-npserver-settings

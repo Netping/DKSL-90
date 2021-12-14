@@ -26,34 +26,34 @@ fi
 rsync -av --progress /mnt/ ./iso/
 
 #clone repo with configs and sync with iso
-git clone git@github.com:Netping/DKSL-90.git ./isogit
+git clone git@github.com:Netping/DKSL-90.git /tmp/isogit
 
-rsync -vr ./DKSL-90/boot/iso/ ./iso/
-rm -rf ./isogit
+rsync -vr /tmp/isogit/boot/iso/ /tmp/iso/
+rm -rf /tmp/isogit
 
 #dksl-90
 apt clean
-apt install --download-only -y DKSL-90
-cp /var/cache/apt/archives/*.deb ./iso/netping/deb/updates/
+apt install --download-only -y dksl-90
+cp /var/cache/apt/archives/*.deb /tmp/iso/netping/deb/updates/
 
 #zabbix
 apt clean
 apt install --download-only -y zabbix-server-pgsql zabbix-frontend-php php7.4-pgsql zabbix-nginx-conf zabbix-agent
-cp /var/cache/apt/archives/*.deb ./iso/netping/deb/zabbix/
-cp ./zabbix-release_*_all.deb ./iso/netping/deb/zabbix/
+cp /var/cache/apt/archives/*.deb /tmp/iso/netping/deb/zabbix/
+cp /tmp/zabbix-release_*_all.deb /tmp/iso/netping/deb/zabbix/
 
 #postgresql 
 apt clean
 apt install --download-only -y postgresql
-cp /var/cache/apt/archives/*.deb ./iso/netping/deb/pgsql
+cp /var/cache/apt/archives/*.deb /tmp/iso/netping/deb/pgsql
 
 
 VERSION=$MAJOR_VERSION.$MINOR_VERSION-$PATH_VERSION-$BUILD_VERSION$(date '+%Y-%m-%dT%H:%M:%S')
-echo $VERSION > ./iso/netping/np_version
+echo $VERSION > /tmp/iso/netping/np_version
 
-mv ./iso/ubuntu ./
-cd ./iso/; find '!' -name "md5sum.txt" '!' -path "./isolinux/*" -follow -type f -exec "$(which md5sum)" {} ; > ../md5sum.txt
-cd .. ; mv ./md5sum.txt ./iso/ ; mv ./ubuntu ./iso/
+mv /tmp/iso/ubuntu /tmp/
+cd /tmp/iso/; find '!' -name "md5sum.txt" '!' -path "./isolinux/*" -follow -type f -exec "$(which md5sum)" {} ; > ../md5sum.txt
+cd .. ; mv /tmp/md5sum.txt /tmp/iso/ ; mv /tmp/ubuntu /tmp/iso/
 
 #combine to bootable iso 
 xorriso -as mkisofs -r   -V Ubuntu\ NetpingZabbix   -o DKSL90.$VERSION.iso   -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot   -boot-load-size 4 -boot-info-table   -eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot   -isohybrid-gpt-basdat -isohybrid-apm-hfsplus   -isohybrid-mbr /usr/lib/ISOLINUX/isohdpfx.bin    iso/boot iso
