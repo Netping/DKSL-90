@@ -1,0 +1,10 @@
+#!/bin/sh
+
+printf "\n"
+printf " NetPing East Co Ltd, Alentis Electronics \n"
+printf " NetPing Monitoring Server 90Z02 \n"
+printf "\n"
+printf " * Documentation:   https://netping.ru/products/netping-monitoring-server-90z02/\n"
+printf " * E-mail support:  support@netping.ru\n"
+printf " * E-mail sales:    sales@netping.ru\n"
+
