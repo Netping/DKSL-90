@@ -7,7 +7,7 @@ autoinstall:
   early-commands:
     - printf 'EARLY COMMANDS'
     - parted -l /dev/sda
-    - sleep 10
+    - sleep 5
   keyboard:
     layout: us
   timezone: Europe/Moscow
@@ -46,13 +46,15 @@ autoinstall:
   late-commands:
     - echo 'visor ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/visor
     - printf 'LATE COMMANDS'
-    - sleep 10
+    - sleep 5
     - cp /cdrom/netping/disk/disk.sh /target/etc/disk.sh
-    - curtin in-target --target=/target -- bash /etc/disk.sh
+    - curtin in-target --target=/target -- echo "@reboot         root    bash /etc/disk.sh" >> /target/etc/crontab
+    - curtin in-target --target=/target -- cat /cdrom/netping/ver/10-help-text > /target/etc/update-motd.d/10-help-text
     - cp /cdrom/netping/np_version /target/etc/np_version
     - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/pgsql/*.deb
     - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/zabbix/*.deb
     - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/updates/*.deb
+#    - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/54/*.deb
 #    - bash /cdrom/netping/apps.sh
 #    - cp /cdrom/netping/network/73-usb-net-by-mac.link /target/lib/systemd/network/
 #    - mkdir /target/etc/np_scripts

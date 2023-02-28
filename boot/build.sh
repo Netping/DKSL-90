@@ -44,7 +44,7 @@ cp /tmp/zabbix-release_*_all.deb /tmp/iso/netping/deb/zabbix/
 
 #postgresql 
 apt clean
-apt install --download-only -y postgresql
+apt install --download-only -y postgresql iptables-persistent
 cp /var/cache/apt/archives/*.deb /tmp/iso/netping/deb/pgsql
 
 
