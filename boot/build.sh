@@ -33,7 +33,7 @@ rm -rf /tmp/isogit
 
 #dksl-90
 apt clean
-apt install --download-only -y dksl-90
+apt install --download-only -y dksl-90 ubnt-dkst54-support
 cp /var/cache/apt/archives/*.deb /tmp/iso/netping/deb/updates/
 
 #zabbix
