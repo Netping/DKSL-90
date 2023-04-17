@@ -38,13 +38,13 @@ cp /var/cache/apt/archives/*.deb /tmp/iso/netping/deb/updates/
 
 #zabbix
 apt clean
-apt install --download-only -y zabbix-server-pgsql zabbix-frontend-php php7.4-pgsql zabbix-nginx-conf zabbix-agent
+apt install --download-only -y zabbix-server-pgsql zabbix-frontend-php php7.4-pgsql zabbix-nginx-conf zabbix-sql-scripts zabbix-agent
 cp /var/cache/apt/archives/*.deb /tmp/iso/netping/deb/zabbix/
 cp /tmp/zabbix-release_*_all.deb /tmp/iso/netping/deb/zabbix/
 
 #postgresql 
 apt clean
-apt install --download-only -y postgresql iptables-persistent
+apt install --download-only -y postgresql postgresql-client iptables-persistent
 cp /var/cache/apt/archives/*.deb /tmp/iso/netping/deb/pgsql
 
 
