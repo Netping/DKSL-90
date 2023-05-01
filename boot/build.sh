@@ -10,6 +10,7 @@ else
 fi
 apt update
 apt install -y rsync cloud-image-utils isolinux xorriso mc netcat git
+bash ./README
 
 cd /tmp && rm -rf ./iso*
 mkdir ./iso && chmod 777 ./iso
@@ -26,9 +27,11 @@ fi
 rsync -av --progress /mnt/ ./iso/
 
 #clone repo with configs and sync with iso
-git clone git@github.com:Netping/DKSL-90.git /tmp/isogit
+#git clone git@github.com:Netping/DKSL-90.git /tmp/isogit
+git clone https://github.com/Netping/DKSL-90.git /tmp/isogit
 
 rsync -vr /tmp/isogit/boot/iso/ /tmp/iso/
+#rsync -vr ./iso/ /tmp/iso/
 rm -rf /tmp/isogit
 
 #dksl-90
