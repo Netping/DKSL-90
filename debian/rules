@@ -1,0 +1,14 @@
+#!/usr/bin/make -f
+# Uncomment this to turn on verbose mode.
+
+export DH_VERBOSE=1
+export DH_OPTIONS=-v
+
+DESTDIR=debian/dksl-90
+
+%:
+	dh $@
+
+override_dh_auto_install:
+	mkdir -p $(DESTDIR)
+	cp -r etc/ $(DESTDIR)/etc/

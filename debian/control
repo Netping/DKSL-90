@@ -1,0 +1,12 @@
+Source: dksl-90
+Section: misc
+Priority: optional
+Maintainer: _valerius@mail.ru
+Version: 2.2-1
+
+Package: dksl-90
+Architecture: all
+Depends: ubnt-zabbix-template, ubnt-app-borg, ubnt-zabbix-npserver-settings
+Build-Depends: debhelper-compat
+Description: NetPing
+ DKSL-90.

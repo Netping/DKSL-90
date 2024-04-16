@@ -1,0 +1,4 @@
+#!/bin/sh
+
+printf "\n"
+printf " Firmware: DKSL-90_2.1-0 \n"
