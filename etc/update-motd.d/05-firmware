@@ -1,4 +1,4 @@
 #!/bin/sh
 
 printf "\n"
-printf " Firmware: DKSL-90_2.1-0 \n"
+printf " Firmware: `/etc/dksl-90-vars firmware` \n"

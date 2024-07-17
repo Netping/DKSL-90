@@ -15,7 +15,7 @@ autoinstall:
     network:
       version: 2
       ethernets:
-        eth0:
+        enp2s0:
           dhcp4: yes
           dhcp-identifier: mac  
   storage:
@@ -53,6 +53,8 @@ autoinstall:
     - cp /cdrom/netping/np_version /target/etc/np_version
     - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/pgsql/*.deb
     - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/zabbix/*.deb
+    - curtin in-target --target=/target -- dpkg-statoverride --remove /etc/ssl/private
+    - curtin in-target --target=/target -- rm -rf /etc/iptables/rules.*
     - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/updates/*.deb
 #    - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/54/*.deb
 #    - bash /cdrom/netping/apps.sh

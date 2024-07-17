@@ -1,5 +1,5 @@
 MAJOR_VERSION="2"
-MINOR_VERSION="1"
+MINOR_VERSION="2"
 PATH_VERSION="0"
 BUILD_VERSION="build"
 #UBUNTU_ISO="https://releases.ubuntu.com/20.04/ubuntu-20.04.2-live-server-amd64.iso"

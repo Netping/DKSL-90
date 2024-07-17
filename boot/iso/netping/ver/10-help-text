@@ -1,10 +1,47 @@
-#!/bin/sh
+#! /bin/bash
+#
+
+function is_installed()
+{
+    dpkg -s $1 >/dev/null  2>&1
+}
 
 printf "\n"
 printf " NetPing East Co Ltd, Alentis Electronics \n"
-printf " NetPing Monitoring Server 90Z02 \n"
+printf " `/etc/dksl-90-vars model` \n"
 printf "\n"
-printf " * Documentation:   https://netping.ru/products/netping-monitoring-server-90z02/\n"
+printf " * Documentation:   https://netping.ru/products/netping-monitoring-server-90z04/\n"
 printf " * E-mail support:  support@netping.ru\n"
 printf " * E-mail sales:    sales@netping.ru\n"
+printf "\n"
 
+pkgs=""
+
+for pkg in postgresql \
+           zabbix-release \
+           zabbix-agent; do
+if is_installed $pkg; then
+    version=`dpkg -s $pkg | awk '/Version:/ {print $2}'`
+    pkgs="$pkgs  $pkg\tversion: $version\n"
+fi; done
+
+if [ "$pkgs" != "" ]; then
+    printf "The following software is installed:\n$pkgs\n"
+fi
+
+pkgs=""
+
+for pkg in dksl-90 \
+           ubnt-dkst54-support \
+           ubnt-app-borg \
+           ubnt-app-borg-doc \
+           ubnt-zabbix-template \
+           ubnt-zabbix-npserver-settings; do
+if is_installed $pkg; then
+    version=`dpkg -s $pkg | awk '/Version:/ {print $2}'`
+    pkgs="$pkgs  $pkg\tversion: $version\n"
+fi; done
+
+if [ "$pkgs" != "" ]; then
+    printf "The following Netping packages are installed:\n$pkgs\n"
+fi

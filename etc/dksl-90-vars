@@ -1,0 +1,55 @@
+#! /bin/sh
+#
+#
+# Netping parameters
+#
+
+# LAN interface
+lan=enp2s0
+# WAN interface
+wan=enp4s0
+# DKST54 USB ethernet interface
+dkst=`ip addr show | awk '$2 ~ /^enx/{print $2}' | sed -e 's/://g'`
+if [ "$dkst" = "" ]; then dkst=enx28ee5205285c; fi
+# DKST54 default button interface
+tty=ttyS1
+# Device model
+model="NetPing Monitoring Server 90Z04"
+# Firmware version
+firmware="DKSL-90_2.2-0"
+
+case "$1" in
+lan)
+  echo $lan
+  ;;
+wan)
+  echo $wan
+  ;;
+dkst)
+  echo $dkst
+  ;;
+tty)
+  echo $tty
+  ;;
+model)
+  echo $model
+  ;;
+firmware)
+  echo $firmware
+  ;;
+netplan)
+  echo "network:
+  ethernets:
+    $lan:
+      dhcp-identifier: mac      
+      dhcp4: true
+    $dkst:
+      dhcp4: false
+      addresses: [192.168.168.1/24]
+  version: 2
+  "
+  ;;
+*)
+  echo ""
+  ;;
+esac
