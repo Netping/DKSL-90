@@ -2,7 +2,7 @@ Source: dksl-90
 Section: misc
 Priority: optional
 Maintainer: _valerius@mail.ru
-Version: 2.1-1
+Version: 2.2-1
 
 Package: dksl-90
 Architecture: all

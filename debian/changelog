@@ -1,5 +1,5 @@
-dksl-90 (2.1-1) unstable; urgency=low
+dksl-90 (2.2-1) unstable; urgency=medium
 
-  * Bla bla sux.
+ * Fix default button script, some UBNT packages
 
- -- Valery V. Sedletski <_valerius@mail.ru>  Tue, 16 Apr 2024 00:52:00 -0300
+DKSL-90 meta packet

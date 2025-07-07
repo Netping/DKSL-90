@@ -1,0 +1,12 @@
+[Unit]
+Description=Default Button Monitor
+After=network.target
+      
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /etc/np_scripts/default_btn_monitor.py
+Restart=always
+      
+[Install]
+WantedBy=multi-user.target

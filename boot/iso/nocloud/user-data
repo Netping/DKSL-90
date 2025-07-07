@@ -7,7 +7,7 @@ autoinstall:
   early-commands:
     - printf 'EARLY COMMANDS'
     - parted -l /dev/sda
-    - sleep 5
+    - sleep 10
   keyboard:
     layout: us
   timezone: Europe/Moscow
@@ -20,22 +20,34 @@ autoinstall:
           dhcp-identifier: mac  
   storage:
     config:
-    - {ptable: gpt, path: /dev/sda, preserve: false, name: '', grub_device: false,
-      type: disk, id: disk-sda}
+    # Main disk
+    - {ptable: gpt, path: /dev/sda, wipe: superblock, preserve: false, name: '', grub_device: false,
+       type: disk, id: disk-sda}
+    
+    # EFI partition (FAT32)
     - {device: disk-sda, size: 536870912, wipe: superblock, flag: boot, number: 1,
-      preserve: false, grub_device: true, type: partition, id: partition-0}
-    - {fstype: fat32, volume: partition-0, preserve: false, type: format, id: format-0}
+       preserve: false, grub_device: true, type: partition, id: partition-0}
+    - {fstype: fat32, volume: partition-0, wipe: superblock, preserve: false, type: format, id: format-0}
+    
+    # /boot partition (ext4)
     - {device: disk-sda, size: 1073741824, wipe: superblock, flag: '', number: 2,
-      preserve: false, grub_device: false, type: partition, id: partition-1}
-    - {fstype: ext4, volume: partition-1, preserve: false, type: format, id: format-1}
+       preserve: false, grub_device: false, type: partition, id: partition-1}
+    - {fstype: ext4, volume: partition-1, wipe: superblock, preserve: false, type: format, id: format-1}
+    
+    # root partition / (ext4)
     - {device: disk-sda, size: 32212254720, wipe: superblock, flag: '', number: 3,
-      preserve: false, grub_device: false, type: partition, id: partition-2}
-    - {fstype: ext4, volume: partition-2, preserve: false, type: format, id: format-2}
+       preserve: false, grub_device: false, type: partition, id: partition-2}
+    - {fstype: ext4, volume: partition-2, wipe: superblock, preserve: false, type: format, id: format-2}
+    
+    # backup partition
+    - {device: disk-sda, size: 30599544832, wipe: superblock, flag: '', number: 4,
+       preserve: false, grub_device: false, type: partition, id: partition-3}
+    
+    # Mount points
     - {device: format-2, path: /, type: mount, id: mount-2}
-    - {device: disk-sda, size: 30599544832, flag: '', number: 4, preserve: false,
-      grub_device: false, type: partition, id: partition-3}
     - {device: format-1, path: /boot, type: mount, id: mount-1}
     - {device: format-0, path: /boot/efi, type: mount, id: mount-0}
+
   ssh:
     allow-pw: true
     install-server: true
@@ -44,10 +56,15 @@ autoinstall:
     password: "$6$tKhGJyWmfCZl$CWmN7WHdoC3CPeRe5WHeHY/h2ncTrSaM7M/Y6z1pL0VogmelODw2XW3.OdrX/kHqd7FtFQnDnenTbvRs/DAtM/"
     username: visor
   late-commands:
-    - echo 'visor ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/visor
     - printf 'LATE COMMANDS'
     - sleep 5
+ #   - echo -e 'visor ALL=(ALL) NOPASSWD:ALLwww-data ALL=(ALL) NOPASSWD:/usr/share/zabbix/modules/NpServerSettings/bash/np_server_settings.sh' > /target/etc/sudoers.d/visor
+ #   - echo 'www-data ALL=(ALL) NOPASSWD:/usr/share/zabbix/modules/NpServerSettings/bash/np_server_settings.sh' >> /target/etc/sudoers.d/visor
+ #   - chmod 440 /target/etc/sudoers.d/visor
     - cp /cdrom/netping/disk/disk.sh /target/etc/disk.sh
+    - mkdir /target/etc/np_scripts
+    - cp /cdrom/netping/button/default_btn_monitor.py /target/etc/np_scripts/
+    - cp /cdrom/netping/button/default.btn_monitor.service /target/usr/lib/systemd/system/monitor_btn.service
     - curtin in-target --target=/target -- echo "@reboot         root    bash /etc/disk.sh" >> /target/etc/crontab
     - curtin in-target --target=/target -- cat /cdrom/netping/ver/10-help-text > /target/etc/update-motd.d/10-help-text
     - cp /cdrom/netping/np_version /target/etc/np_version
@@ -56,16 +73,21 @@ autoinstall:
     - curtin in-target --target=/target -- dpkg-statoverride --remove /etc/ssl/private
     - curtin in-target --target=/target -- rm -rf /etc/iptables/rules.*
     - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/updates/*.deb
-#    - curtin in-target --target=/target -- apt install -y /cdrom/netping/deb/54/*.deb
-#    - bash /cdrom/netping/apps.sh
-#    - cp /cdrom/netping/network/73-usb-net-by-mac.link /target/lib/systemd/network/
-#    - mkdir /target/etc/np_scripts
-#    - cp /cdrom/netping/button/* /target/etc/np_scripts/
-#    - mkdir /target/etc/systemd/system/getty@tty2.service.d
-#    - cp /cdrom/netping/button/override.conf /target/etc/systemd/system/getty@tty2.service.d/
-#    - cp /cdrom/netping/button/.bash_login /target/etc/skel/
-#    - cp /cdrom/netping/network/netplan.yaml /target/etc/netplan/
-#    - cp /cdrom/netping/network/grub /target/etc/default/
-#    - curtin in-target --target=/target -- update-grub
     - printf 'INSTALLATION COMPLETED. Please remove installation media and press Ctrl+Alt+Del' 
     - sleep 3600
+  user-data:
+    write_files:
+      - content: |
+          visor ALL=(ALL) NOPASSWD:ALL
+          www-data ALL=(ALL) NOPASSWD: /usr/share/zabbix/modules/NpServerSettings/bash/np_server_settings.sh
+        path: /etc/sudoers.d/visor
+        permissions: '0440'
+        owner: root:root
+    runcmd:
+#      - [chmod, +x, /etc/np_scripts/default_btn_monitor.py]
+      - [chown, root, /usr/lib/systemd/system/monitor_btn.service]
+      - [systemctl, enable, monitor_btn.service]
+      - [systemctl, start, monitor_btn.service]
+      - echo '\n[keyfile]\nunmanaged-devices=none' >> /etc/NetworkManager/NetworkManager.conf
+      - [systemctl, daemon-reload]
+      - [systemctl, restart, NetworkManager]

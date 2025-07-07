@@ -41,15 +41,13 @@ rsync -vr ./iso/ /tmp/iso/
 cd /tmp
 
 #postgresql 
-apt clean
-apt remove -y ca-certificates
-apt install --download-only -y postgresql postgresql-client iptables-persistent ca-certificates
-cp /var/cache/apt/archives/*.deb /tmp/iso/netping/deb/pgsql
+cp /home/pgsql/*.deb /tmp/iso/netping/deb/pgsql/
 
 #zabbix
-apt clean
-apt install --download-only -y zabbix-server-pgsql zabbix-agent zabbix-frontend-php php7.4-pgsql zabbix-nginx-conf zabbix-sql-scripts
-cp /var/cache/apt/archives/*.deb /tmp/iso/netping/deb/zabbix/
+#apt clean
+#apt install --download-only -y zabbix-server-pgsql zabbix-agent zabbix-frontend-php php7.4-pgsql zabbix-nginx-conf zabbix-sql-scripts
+#cp /var/cache/apt/archives/*.deb /tmp/iso/netping/deb/zabbix/
+cp /home/zabbix/*.deb /tmp/iso/netping/deb/zabbix/
 cp /tmp/zabbix-release_*_all.deb /tmp/iso/netping/deb/zabbix/
 
 #dksl-90
