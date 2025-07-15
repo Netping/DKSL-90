@@ -79,7 +79,7 @@ autoinstall:
     write_files:
       - content: |
           visor ALL=(ALL) NOPASSWD:ALL
-          www-data ALL=(ALL) NOPASSWD: /usr/share/zabbix/modules/NpServerSettings/bash/np_server_settings.sh
+          www-data ALL=(ALL) NOPASSWD: /usr/sbin/netplan apply
         path: /etc/sudoers.d/visor
         permissions: '0440'
         owner: root:root
@@ -88,6 +88,8 @@ autoinstall:
       - [chown, root, /usr/lib/systemd/system/monitor_btn.service]
       - [systemctl, enable, monitor_btn.service]
       - [systemctl, start, monitor_btn.service]
-      - echo '\n[keyfile]\nunmanaged-devices=none' >> /etc/NetworkManager/NetworkManager.conf
-      - [systemctl, daemon-reload]
-      - [systemctl, restart, NetworkManager]
+      - [groupadd, netplan-admin]
+      - [usermod, -aG, netplan-admin, www-data]
+      - [chown, -R, root:netplan-admin, /etc/netplan]
+      - [chmod, -R, 775, /etc/netplan]
+

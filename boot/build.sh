@@ -60,7 +60,7 @@ apt install --download-only -y curl libxxhash0 fuse3 libjs-bootstrap iptables-pe
   libnm0 libonig5 libpcsclite1 libqmi-glib5 libqmi-proxy libsensors-config libsensors5 libteamdctl0 \
   modemmanager netfilter-persistent network-manager network-manager-pptp ppp pptp-linux python3-msgpack \
   python3-packaging python3-pyparsing usb-modeswitch usb-modeswitch-data wireless-regdb wpasupplicant \
-  iptables libip4tc2 libip6tc2 libxtables12
+  iptables libip4tc2 libip6tc2 libxtables12 php-yaml
 cp $curdir/../../*.deb /tmp/iso/netping/deb/updates/
 #apt install --download-only -y dksl-90 ubnt-dkst54-support
 cp /var/cache/apt/archives/*.deb /tmp/iso/netping/deb/updates/

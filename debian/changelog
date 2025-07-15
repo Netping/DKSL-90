@@ -1,5 +1,6 @@
-dksl-90 (2.2-1) unstable; urgency=medium
+dksl-90 (2.2-2) unstable; urgency=medium
 
  * Fix default button script, some UBNT packages
+ * Change netplan section
 
 DKSL-90 meta packet

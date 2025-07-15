@@ -16,7 +16,7 @@ tty=ttyS1
 # Device model
 model="NetPing Monitoring Server 90Z04"
 # Firmware version
-firmware="DKSL-90_2.2-0"
+firmware="DKSL-90-2.2-0"
 
 case "$1" in
 lan)
@@ -40,9 +40,6 @@ firmware)
 netplan)
   echo "network:
   ethernets:
-    $lan:
-      dhcp-identifier: mac      
-      dhcp4: true
     $dkst:
       dhcp4: false
       addresses: [192.168.168.1/24]
